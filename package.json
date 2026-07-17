@@ -20,6 +20,7 @@
   "homepage": "https://github.com/leventd2-blip/brommykneipe#readme",
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.1.5"
   }
 }

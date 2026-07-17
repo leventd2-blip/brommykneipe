@@ -1,19 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gasthaus zum Adler | Authentic German Pub</title>
-    <link href="./dist/output.css" rel="stylesheet">
+    <title>Brommy Kneipe</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .nav-active { @apply bg-emerald-800 text-white shadow-md font-semibold; }
+        .nav-inactive { @apply text-emerald-100 hover:text-white hover:bg-emerald-700/50; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.25s ease-out forwards; }
+    </style>
 </head>
-<body class="bg-stone-900 text-stone-100 font-sans">
-    <header class="relative bg-amber-950 text-amber-50 py-24 px-6 text-center border-b-4 border-amber-600">
-        <h1 class="text-5xl font-serif font-bold tracking-wide mb-2">Gasthaus zum Adler</h1>
-        <p class="text-xl italic text-amber-300">Authentic Bavarian Beer & Hearty Food</p>
-    </header>
-    <main class="max-w-4xl mx-auto px-6 py-12 text-center">
-        <h2 class="text-3xl font-semibold text-amber-500 mb-4">Willkommen!</h2>
-        <p class="text-stone-300 text-lg max-w-xl mx-auto">Open for fresh giant pretzels and pristine pours of Munich lager.</p>
+<body class="bg-white text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+
+    <!-- Navigation Bar (Grün) -->
+    <nav class="bg-emerald-900 border-b border-emerald-950 sticky top-0 z-50 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <button data-tab="home" class="tab-btn text-2xl font-serif font-bold text-amber-400 tracking-wide cursor-pointer transition transform hover:scale-102">
+                        🍺 Brommy Kneipe
+                    </button>
+                </div>
+                <div class="flex space-x-2 sm:space-x-4">
+                    <button data-tab="home" class="tab-btn nav-active px-3 py-1.5 rounded-lg text-sm font-medium transition cursor-pointer">Home</button>
+                    <button data-tab="speisen" class="tab-btn nav-inactive px-3 py-1.5 rounded-lg text-sm font-medium transition cursor-pointer">Speisekarte</button>
+                    <button data-tab="kontakt" class="tab-btn nav-inactive px-3 py-1.5 rounded-lg text-sm font-medium transition cursor-pointer">Kontakt</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area (Weißer Hintergrund) -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10" id="view-target">
+        <!-- Injected via JS -->
     </main>
+
+    <footer class="bg-slate-900 text-slate-400 text-center py-6 text-sm border-t border-slate-800 mt-auto">
+        <p>© 2026 Brommy Kneipe. Alle Rechte vorbehalten.</p>
+    </footer>
+
+    <script type="module">
+        import { speisenKategorien } from './components/speisen.js';
+        import { kontaktDaten } from './components/kontakt.js';
+
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const viewTarget = document.getElementById('view-target');
+
+        function renderTab(tabName) {
+            let html = `<div class="animate-fadeIn space-y-12">`;
+
+            if (tabName === 'home') {
+                html += `
+                    <div class="relative bg-emerald-950 text-white py-24 px-6 text-center rounded-2xl border border-emerald-900 shadow-xl">
+                        <div class="relative z-10 max-w-3xl mx-auto space-y-4">
+                            <h1 class="text-4xl sm:text-6xl font-serif font-bold tracking-wide">Brommy Kneipe</h1>
+                            <p class="text-xl sm:text-2xl italic text-emerald-300">Frisches Bier, herzhafte Klassiker & echte Berliner Gemütlichkeit.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-50 p-6 sm:p-10 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="text-2xl sm:text-3xl font-bold text-emerald-900 font-serif mb-4">Willkommen im Original</h3>
+                        <p class="text-slate-600 leading-relaxed text-base sm:text-lg">
+                            Entdecke unser uriges Ambiente im Herzen von Berlin. Nutze ganz bequem das obere Menü, um direkt in unsere Speisekarte reinzuschauen oder unsere Öffnungszeiten einzusehen. Wir freuen uns auf deinen Besuch!
+                        </p>
+                    </div>`;
+            } 
+            
+            else if (tabName === 'speisen') {
+                html += `
+                    <div class="space-y-4 text-center max-w-2xl mx-auto">
+                        <h2 class="text-3xl sm:text-4xl font-bold font-serif text-emerald-900">🍽️ Unsere Speisekarte</h2>
+                    </div>`;
+
+                speisenKategorien.forEach(kat => {
+                    html += `
+                        <div class="space-y-6">
+                            <h3 class="text-2xl font-bold font-serif text-emerald-800 border-b-2 border-emerald-100 pb-2 mt-4">${kat.kategorieName}</h3>
+                            <div class="grid sm:grid-cols-2 gap-6">`;
+                    
+                    kat.items.forEach(item => {
+                        html += `
+                            <div class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition p-5 flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="flex justify-between items-start gap-2">
+                                        <h4 class="font-bold text-lg text-slate-900">${item.name}</h4>
+                                        <span class="text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-lg text-sm whitespace-nowrap">${item.price}</span>
+                                    </div>
+                                    <p class="text-slate-500 text-sm mt-1 leading-relaxed">${item.description}</p>
+                                </div>
+                            </div>`;
+                    });
+                    
+                    html += `</div></div>`;
+                });
+            } 
+            
+            else if (tabName === 'kontakt') {
+                html += `
+                    <div class="bg-slate-50 rounded-2xl border border-slate-200 p-6 sm:p-8">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-emerald-900 font-serif mb-3">${kontaktDaten.infoTitel}</h2>
+                        <p class="text-slate-600 leading-relaxed">${kontaktDaten.infoText}</p>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <!-- Blaue Box für E-Mail -->
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-6 rounded-2xl text-center flex flex-col justify-between items-center space-y-4 shadow-sm">
+                            <div class="space-y-2">
+                                <span class="text-4xl">✉️</span>
+                                <h3 class="text-xl font-bold text-blue-900">Kontaktiere uns per E-Mail!</h3>
+                                <p class="text-blue-700 text-sm">Fragen zu Reservierungen oder Feiern? Schreib uns einfach direkt.</p>
+                            </div>
+                            <a href="mailto:${kontaktDaten.email}" class="inline-block w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow transition text-center cursor-pointer">
+                                Kontaktieren Knopf
+                            </a>
+                        </div>
+
+                        <!-- Grüne Box für WhatsApp -->
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-6 rounded-2xl text-center flex flex-col justify-between items-center space-y-4 shadow-sm">
+                            <div class="space-y-2">
+                                <span class="text-4xl">💬</span>
+                                <h3 class="text-xl font-bold text-green-900">Schreib uns per WhatsApp!</h3>
+                                <p class="text-green-700 text-sm">Schnell und unkompliziert per Chat auf dein Smartphone.</p>
+                            </div>
+                            <a href="https://wa.me/${kontaktDaten.telefon.replace('+', '')}" target="_blank" rel="noopener noreferrer" class="inline-block w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow transition text-center cursor-pointer">
+                                WhatsApp Chat starten
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 space-y-4 shadow-sm">
+                            <h3 class="text-xl font-bold text-emerald-900 font-serif">⏰ Öffnungszeiten</h3>
+                            <div class="space-y-2 text-sm sm:text-base">
+                                ${kontaktDaten.zeiten.map(z => `<p class="flex justify-between border-b border-slate-100 pb-1"><span>${z.tage}:</span> <span class="font-medium text-slate-600">${z.uhrzeit}</span></p>`).join('')}
+                            </div>
+                            <p class="text-red-600 font-medium text-xs sm:text-sm tracking-wide bg-red-50 py-1 px-3 rounded inline-block">${kontaktDaten.ruhetag}</p>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 space-y-4 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-emerald-900 font-serif">📍 Wo ihr uns findet</h3>
+                                <p class="text-slate-600 leading-relaxed mt-2 whitespace-pre-line">${kontaktDaten.adresse}</p>
+                            </div>
+                            <p class="text-emerald-800 text-sm font-mono mt-4 bg-emerald-50 p-2 rounded border border-emerald-100">📧 ${kontaktDaten.email}</p>
+                        </div>
+                    </div>`;
+            }
+
+            html += `</div>`;
+            viewTarget.innerHTML = html;
+        }
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+                renderTab(targetTab);
+                tabButtons.forEach(btn => {
+                    if (btn.getAttribute('data-tab') === targetTab) {
+                        btn.classList.add('nav-active');
+                        btn.classList.remove('nav-inactive');
+                    } else {
+                        btn.classList.remove('nav-active');
+                        btn.classList.add('nav-inactive');
+                    }
+                });
+            });
+        });
+
+        renderTab('home');
+    </script>
 </body>
 </html>
