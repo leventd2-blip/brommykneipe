@@ -3,47 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brommy Kneipe | Premium Lounge</title>
+    <title>Brommy Kneipe | Bremen</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <style>
         * {
             font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
         }
-        .font-serif-modern {
-            font-family: 'Playfair Display', Georgia, serif;
+        .font-display {
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
         }
+        /* Bremen Grün-Weiß Nav-Styles */
         .nav-active { 
-            background-color: rgba(245, 158, 11, 0.1) !important; 
-            color: #fbbf24 !important; 
-            border: 1px solid rgba(245, 158, 11, 0.25) !important;
+            background-color: #ffffff !important; 
+            color: #115e59 !important; /* Bremen Grün */
+            border: 1px solid #ffffff !important;
         }
         .nav-inactive { 
-            color: #94a3b8 !important; 
+            color: #ccfbf1 !important; 
             border: 1px solid transparent !important;
         }
         .nav-inactive:hover { 
-            color: #f8fafc !important; 
-            background-color: rgba(255, 255, 255, 0.03) !important; 
+            color: #ffffff !important; 
+            background-color: rgba(255, 255, 255, 0.1) !important; 
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fadeIn { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
-<body class="bg-[#0b0f17] text-slate-300 min-h-screen flex flex-col antialiased selection:bg-amber-500/30 selection:text-amber-200">
+<body class="bg-[#0f172a] text-slate-200 min-h-screen flex flex-col antialiased selection:bg-teal-600/30 selection:text-teal-200">
 
-    <!-- Premium Navigation -->
-    <nav class="bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800/60 sticky top-0 z-50 shadow-xl">
+    <!-- Bremen Green/White Navigation -->
+    <nav class="bg-[#115e59] border-b border-[#0f4c47] sticky top-0 z-50 shadow-xl">
         <div class="max-w-5xl mx-auto px-6">
             <div class="flex items-center justify-between h-20">
                 <div class="flex-shrink-0">
-                    <button data-tab="home" class="tab-btn font-serif-modern text-2xl font-bold text-slate-100 tracking-wide cursor-pointer bg-transparent border-0 flex items-center gap-2 hover:opacity-90 transition">
-                        <span class="text-amber-400">Brommy</span> <span class="font-light text-slate-400">Kneipe</span>
+                    <button data-tab="home" class="tab-btn font-display text-2xl font-bold text-white tracking-wide cursor-pointer bg-transparent border-0 flex items-center gap-2 hover:opacity-90 transition">
+                        <span>Brommy</span> <span class="font-light text-teal-200">Kneipe</span>
                     </button>
                 </div>
-                <div class="flex space-x-1 sm:space-x-2 bg-[#020617]/40 p-1 rounded-xl border border-slate-800/40">
+                <div class="flex space-x-1 sm:space-x-2 bg-[#0d4c47] p-1 rounded-xl border border-[#0b3f3b]">
                     <button data-tab="home" class="tab-btn nav-active px-4 py-2 rounded-lg text-sm font-semibold transition cursor-pointer border-0">Home</button>
                     <button data-tab="speisen" class="tab-btn nav-inactive px-4 py-2 rounded-lg text-sm font-semibold transition cursor-pointer border-0">Speisen</button>
                     <button data-tab="kontakt" class="tab-btn nav-inactive px-4 py-2 rounded-lg text-sm font-semibold transition cursor-pointer border-0">Kontakt</button>
@@ -57,9 +58,9 @@
         <!-- Injected via JS -->
     </main>
 
-    <!-- Elegant Footer -->
-    <footer class="bg-[#020617] text-slate-600 text-center py-8 text-xs border-t border-slate-900 mt-auto tracking-wider">
-        <p>© 2026 BROMMY KNEIPE. ALL RIGHTS RESERVED.</p>
+    <!-- Footer -->
+    <footer class="bg-[#090d16] text-slate-600 text-center py-8 text-xs border-t border-slate-900 mt-auto tracking-wider">
+        <p>© 2026 BROMMY KNEIPE BREMEN. ALL RIGHTS RESERVED.</p>
     </footer>
 
     <script type="module">
@@ -74,19 +75,19 @@
 
             if (tabName === 'home') {
                 html += `
-                    <div class="relative bg-gradient-to-b from-[#111c24] to-[#0d151b] text-white py-24 px-8 text-center rounded-3xl border border-emerald-500/10 shadow-2xl overflow-hidden">
-                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.08),transparent_60%)]"></div>
+                    <div class="relative bg-gradient-to-b from-[#115e59] to-[#0f4c47] text-white py-24 px-8 text-center rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.15),transparent_60%)]"></div>
                         <div class="relative z-10 max-w-xl mx-auto space-y-4">
-                            <span class="text-amber-400 font-semibold tracking-widest text-xs uppercase bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">Tradition seit Generationen</span>
-                            <h1 class="font-serif-modern text-4xl sm:text-6xl font-normal tracking-tight text-slate-100">Kulinarische Erlebnisse</h1>
-                            <p class="text-slate-400 text-base sm:text-lg max-w-md mx-auto leading-relaxed">Frisches Zapfbier, ehrliche Klassiker & unverwechselbare Berliner Gemütlichkeit.</p>
+                            <span class="text-white font-semibold tracking-widest text-xs uppercase bg-white/10 px-3 py-1 rounded-full border border-white/20">Moin aus Bremen</span>
+                            <h1 class="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white">Brommy Kneipe</h1>
+                            <p class="text-teal-100 text-base sm:text-lg max-w-md mx-auto leading-relaxed">Kühles Pils, hanseatische Klassiker & echte Bremer Gemütlichkeit.</p>
                         </div>
                     </div>
                     
-                    <div class="bg-[#111724]/40 border border-slate-800/60 p-8 sm:p-10 rounded-3xl shadow-sm space-y-4">
-                        <h3 class="font-serif-modern text-2xl sm:text-3xl font-medium text-slate-100">Willkommen im Original</h3>
-                        <p class="text-slate-400 leading-relaxed text-base sm:text-lg font-light">
-                            Entdecke unser uriges Ambiente im Herzen von Berlin. Nutze ganz bequem das obere Menü, um direkt in unsere Speisekarte reinzuschauen oder unsere Öffnungszeiten einzusehen. Wir freuen uns auf deinen Besuch!
+                    <div class="bg-white text-slate-800 p-8 sm:p-10 rounded-3xl shadow-lg space-y-4 border border-slate-100">
+                        <h3 class="font-display text-2xl sm:text-3xl font-bold text-[#115e59]">Willkommen an der Weser</h3>
+                        <p class="text-slate-600 leading-relaxed text-base sm:text-lg font-light">
+                            Entdecke unser uriges Ambiente im Herzen von Bremen. Nutze ganz bequem das obere Menü, um direkt in unsere Speisekarte reinzuschauen oder unsere Öffnungszeiten einzusehen. Wir freuen uns auf deinen Besuch!
                         </p>
                     </div>`;
             } 
@@ -94,24 +95,27 @@
             else if (tabName === 'speisen') {
                 html += `
                     <div class="text-center max-w-xl mx-auto py-4 space-y-2">
-                        <span class="text-amber-400 font-semibold tracking-widest text-xs uppercase">Aus der Küche</span>
-                        <h2 class="font-serif-modern text-3xl sm:text-5xl text-slate-100">Unsere Speisekarte</h2>
-                        <div class="h-[1px] w-12 bg-amber-500/40 mx-auto mt-4"></div>
+                        <span class="text-teal-400 font-semibold tracking-widest text-xs uppercase">Frisch zubereitet</span>
+                        <h2 class="font-display text-3xl sm:text-5xl text-white font-bold">Speisekarte</h2>
+                        <div class="h-[2px] w-12 bg-[#115e59] mx-auto mt-4"></div>
                     </div>`;
 
                 speisenKategorien.forEach(kat => {
                     html += `
                         <div class="space-y-6 mt-10">
-                            <h3 class="font-serif-modern text-2xl text-amber-400/90 font-medium tracking-wide border-b border-slate-800 pb-3">${kat.kategorieName}</h3>
+                            <h3 class="font-display text-2xl text-white font-semibold tracking-wide border-b border-slate-800 pb-3 flex justify-between items-baseline">
+                                <span>${kat.kategorieName}</span>
+                                <span class="h-1 flex-grow mx-4 border-b border-dashed border-slate-800"></span>
+                            </h3>
                             <div class="grid sm:grid-cols-2 gap-4">`;
                     
                     kat.items.forEach(item => {
                         html += `
-                            <div class="bg-[#111724]/20 rounded-2xl border border-slate-800/40 p-5 flex flex-col justify-between hover:border-slate-700/60 transition duration-300">
+                            <div class="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col justify-between hover:border-teal-500/30 transition duration-300 shadow-md text-slate-800">
                                 <div class="space-y-2">
                                     <div class="flex justify-between items-baseline gap-4">
-                                        <h4 class="font-semibold text-slate-200 text-base tracking-wide">${item.name}</h4>
-                                        <span class="text-amber-400 font-mono font-medium text-sm whitespace-nowrap bg-amber-400/5 px-2.5 py-0.5 rounded-md border border-amber-400/10">${item.price}</span>
+                                        <h4 class="font-bold text-[#115e59] text-base tracking-wide">${item.name}</h4>
+                                        <span class="text-[#115e59] font-mono font-bold text-sm whitespace-nowrap bg-teal-50 px-2.5 py-0.5 rounded-md border border-teal-100">${item.price}</span>
                                     </div>
                                     <p class="text-slate-500 text-xs sm:text-sm leading-relaxed font-light">${item.description || ''}</p>
                                 </div>
@@ -124,51 +128,51 @@
             
             else if (tabName === 'kontakt') {
                 html += `
-                    <div class="bg-[#111724]/20 border border-slate-800/40 rounded-3xl p-8 space-y-3">
-                        <span class="text-amber-400 font-semibold tracking-widest text-xs uppercase">Reservierungen</span>
-                        <h2 class="font-serif-modern text-2xl sm:text-3xl text-slate-100 font-medium">${kontaktDaten.infoTitel || 'Kontakt & Platz anfragen'}</h2>
-                        <p class="text-slate-400 font-light leading-relaxed text-sm sm:text-base">${kontaktDaten.infoText || 'Hier findest du alle Wege zu uns.'}</p>
+                    <div class="bg-white text-slate-800 border border-slate-100 rounded-3xl p-8 space-y-3 shadow-lg">
+                        <span class="text-[#115e59] font-semibold tracking-widest text-xs uppercase">Reservierungen</span>
+                        <h2 class="font-display text-2xl sm:text-3xl text-[#115e59] font-bold">${kontaktDaten.infoTitel || 'Kontakt & Platz anfragen'}</h2>
+                        <p class="text-slate-600 font-light leading-relaxed text-sm sm:text-base">${kontaktDaten.infoText || 'Hier findest du alle Wege zu uns.'}</p>
                     </div>
 
                     <div class="grid sm:grid-cols-2 gap-4">
-                        <div class="bg-[#111a2e]/30 border border-blue-500/10 p-6 rounded-2xl text-center flex flex-col justify-between items-center space-y-4 hover:border-blue-500/20 transition">
+                        <div class="bg-white border border-slate-100 p-6 rounded-2xl text-center flex flex-col justify-between items-center space-y-4 shadow-md text-slate-800">
                             <div class="space-y-1.5">
-                                <div class="text-2xl text-blue-400 bg-blue-500/5 w-12 h-12 flex items-center justify-center rounded-xl border border-blue-500/10 mx-auto">✉️</div>
-                                <h3 class="text-base font-semibold text-slate-200 mt-2">E-Mail schreiben</h3>
-                                <p class="text-slate-500 text-xs px-2">Für größere Gruppen, Feiern oder Events.</p>
+                                <div class="text-2xl text-[#115e59] bg-teal-50 w-12 h-12 flex items-center justify-center rounded-xl border border-teal-100 mx-auto">✉️</div>
+                                <h3 class="text-base font-bold text-[#115e59] mt-2">E-Mail schreiben</h3>
+                                <p class="text-slate-500 text-xs px-2">Für größere Gruppen, Feiern oder Tisch-Anfragen.</p>
                             </div>
-                            <a href="mailto:${kontaktDaten.email}" class="inline-block w-full bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 font-semibold px-4 py-2.5 rounded-xl transition text-center no-underline text-xs tracking-wide uppercase">
+                            <a href="mailto:${kontaktDaten.email}" class="inline-block w-full bg-[#115e59] hover:bg-[#0f4c47] text-white font-semibold px-4 py-2.5 rounded-xl transition text-center no-underline text-xs tracking-wide uppercase shadow-sm">
                                 Nachricht senden
                             </a>
                         </div>
 
-                        <div class="bg-[#0f1d18]/30 border border-emerald-500/10 p-6 rounded-2xl text-center flex flex-col justify-between items-center space-y-4 hover:border-emerald-500/20 transition">
+                        <div class="bg-white border border-slate-100 p-6 rounded-2xl text-center flex flex-col justify-between items-center space-y-4 shadow-md text-slate-800">
                             <div class="space-y-1.5">
-                                <div class="text-2xl text-emerald-400 bg-emerald-500/5 w-12 h-12 flex items-center justify-center rounded-xl border border-emerald-500/10 mx-auto">💬</div>
-                                <h3 class="text-base font-semibold text-slate-200 mt-2">WhatsApp Chat</h3>
-                                <p class="text-slate-500 text-xs px-2">Schneller Support direkt auf dein Smartphone.</p>
+                                <div class="text-2xl text-emerald-600 bg-emerald-50 w-12 h-12 flex items-center justify-center rounded-xl border border-emerald-100 mx-auto">💬</div>
+                                <h3 class="text-base font-bold text-emerald-800 mt-2">WhatsApp Chat</h3>
+                                <p class="text-slate-500 text-xs px-2">Schneller, unkomplizierter Support direkt aufs Handy.</p>
                             </div>
-                            <a href="https://wa.me/${kontaktDaten.telefon ? kontaktDaten.telefon.replace('+', '') : ''}" target="_blank" rel="noopener noreferrer" class="inline-block w-full bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-400 border border-emerald-500/20 font-semibold px-4 py-2.5 rounded-xl transition text-center no-underline text-xs tracking-wide uppercase">
+                            <a href="https://wa.me/${kontaktDaten.telefon ? kontaktDaten.telefon.replace('+', '') : ''}" target="_blank" rel="noopener noreferrer" class="inline-block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-xl transition text-center no-underline text-xs tracking-wide uppercase shadow-sm">
                                 Chat starten
                             </a>
                         </div>
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-4">
-                        <div class="bg-[#111724]/20 p-6 rounded-2xl border border-slate-800/40 space-y-4">
-                            <h3 class="font-serif-modern text-lg text-slate-200 flex items-center gap-3">⏰ Öffnungszeiten</h3>
-                            <div class="space-y-2 text-sm text-slate-400">
-                                ${kontaktDaten.zeiten ? kontaktDaten.zeiten.map(z => `<div class="flex justify-between border-b border-slate-800/40 pb-2"><span>${z.tage}</span> <span class="font-medium text-slate-300 font-mono">${z.uhrzeit}</span></div>`).join('') : 'Keine Zeiten hinterlegt'}
+                        <div class="bg-white text-slate-800 p-6 rounded-2xl border border-slate-100 space-y-4 shadow-md">
+                            <h3 class="font-display text-lg text-[#115e59] font-bold flex items-center gap-3">⏰ Öffnungszeiten</h3>
+                            <div class="space-y-2 text-sm text-slate-600">
+                                ${kontaktDaten.zeiten ? kontaktDaten.zeiten.map(z => `<div class="flex justify-between border-b border-slate-100 pb-2"><span>${z.tage}</span> <span class="font-bold text-[#115e59] font-mono">${z.uhrzeit}</span></div>`).join('') : 'Keine Zeiten hinterlegt'}
                             </div>
-                            ${kontaktDaten.ruhetag ? `<p class="text-red-400/90 font-semibold text-xs tracking-wider bg-red-950/30 py-1.5 px-3 rounded-lg border border-red-500/10 inline-block m-0 mt-1">${kontaktDaten.ruhetag.toUpperCase()}</p>` : ''}
+                            ${kontaktDaten.ruhetag ? `<p class="text-red-600 font-semibold text-xs tracking-wider bg-red-50 py-1.5 px-3 rounded-lg border border-red-100 inline-block m-0 mt-1">${kontaktDaten.ruhetag.toUpperCase()}</p>` : ''}
                         </div>
                         
-                        <div class="bg-[#111724]/20 p-6 rounded-2xl border border-slate-800/40 flex flex-col justify-between space-y-4">
+                        <div class="bg-white text-slate-800 p-6 rounded-2xl border border-slate-100 flex flex-col justify-between space-y-4 shadow-md">
                             <div>
-                                <h3 class="font-serif-modern text-lg text-slate-200 flex items-center gap-3">📍 Standort</h3>
-                                <p class="text-slate-400 text-sm leading-relaxed mt-3 whitespace-pre-line font-light">${kontaktDaten.adresse || 'Adresse folgt'}</p>
+                                <h3 class="font-display text-lg text-[#115e59] font-bold flex items-center gap-3">📍 Standort</h3>
+                                <p class="text-slate-600 text-sm leading-relaxed mt-3 whitespace-pre-line font-light">${kontaktDaten.adresse || 'Adresse folgt'}</p>
                             </div>
-                            <p class="text-amber-400/80 text-xs font-mono bg-amber-400/5 p-3 rounded-xl border border-amber-500/10 m-0 break-all select-all">📧 ${kontaktDaten.email}</p>
+                            <p class="text-[#115e59] text-xs font-mono bg-teal-50 p-3 rounded-xl border border-teal-100 m-0 break-all select-all font-bold">📧 ${kontaktDaten.email}</p>
                         </div>
                     </div>`;
             }
