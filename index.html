@@ -3,48 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brommy Kneipe | Bremen</title>
+    <title>Brommy Kneipe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300..800&display=swap" rel="stylesheet">
     <style>
         * {
             font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
         }
-        .font-display {
-            font-family: 'Space Grotesk', -apple-system, sans-serif;
-        }
-        /* Bremen Grün-Weiß Nav-Styles */
         .nav-active { 
             background-color: #ffffff !important; 
-            color: #115e59 !important; /* Bremen Grün */
-            border: 1px solid #ffffff !important;
+            color: #0f172a !important; 
+            font-weight: 700 !important;
         }
         .nav-inactive { 
-            color: #ccfbf1 !important; 
-            border: 1px solid transparent !important;
+            color: #94a3b8 !important; 
         }
         .nav-inactive:hover { 
             color: #ffffff !important; 
-            background-color: rgba(255, 255, 255, 0.1) !important; 
+            background-color: #1e293b !important; 
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fadeIn { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
     </style>
 </head>
-<body class="bg-[#0f172a] text-slate-200 min-h-screen flex flex-col antialiased selection:bg-teal-600/30 selection:text-teal-200">
+<body class="bg-[#090d16] text-slate-200 min-h-screen flex flex-col antialiased">
 
-    <!-- Bremen Green/White Navigation -->
-    <nav class="bg-[#115e59] border-b border-[#0f4c47] sticky top-0 z-50 shadow-xl">
+    <!-- Clean Premium Navigation -->
+    <nav class="bg-[#0f172a] border-b border-slate-800/80 sticky top-0 z-50 shadow-md">
         <div class="max-w-5xl mx-auto px-6">
             <div class="flex items-center justify-between h-20">
                 <div class="flex-shrink-0">
-                    <button data-tab="home" class="tab-btn font-display text-2xl font-bold text-white tracking-wide cursor-pointer bg-transparent border-0 flex items-center gap-2 hover:opacity-90 transition">
-                        <span>Brommy</span> <span class="font-light text-teal-200">Kneipe</span>
+                    <button data-tab="home" class="tab-btn text-xl font-extrabold text-white tracking-tight cursor-pointer bg-transparent border-0 flex items-center gap-2 hover:opacity-80 transition">
+                        BROMMY KNEIPE
                     </button>
                 </div>
-                <div class="flex space-x-1 sm:space-x-2 bg-[#0d4c47] p-1 rounded-xl border border-[#0b3f3b]">
+                <div class="flex space-x-1 sm:space-x-2 bg-[#020617] p-1 rounded-xl border border-slate-800">
                     <button data-tab="home" class="tab-btn nav-active px-4 py-2 rounded-lg text-sm font-semibold transition cursor-pointer border-0">Home</button>
                     <button data-tab="speisen" class="tab-btn nav-inactive px-4 py-2 rounded-lg text-sm font-semibold transition cursor-pointer border-0">Speisen</button>
                     <button data-tab="kontakt" class="tab-btn nav-inactive px-4 py-2 rounded-lg text-sm font-semibold transition cursor-pointer border-0">Kontakt</button>
@@ -53,14 +48,13 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="flex-grow max-w-4xl w-full mx-auto px-6 py-12 sm:py-16" id="view-target">
+    <!-- Main Body Area -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-6 py-12" id="view-target">
         <!-- Injected via JS -->
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-[#090d16] text-slate-600 text-center py-8 text-xs border-t border-slate-900 mt-auto tracking-wider">
-        <p>© 2026 BROMMY KNEIPE BREMEN. ALL RIGHTS RESERVED.</p>
+    <footer class="bg-[#020617] text-slate-600 text-center py-8 text-xs border-t border-slate-900 mt-auto tracking-widest">
+        <p>© 2026 BROMMY KNEIPE. ALL RIGHTS RESERVED.</p>
     </footer>
 
     <script type="module">
@@ -70,54 +64,73 @@
         const tabButtons = document.querySelectorAll('.tab-btn');
         const viewTarget = document.getElementById('view-target');
 
+        // Funktion sendet den Log-Ping an deinen lokalen Codespace-Server auf Port 8080
+        async function updateVisits() {
+            try {
+                const currentHost = window.location.hostname;
+                let logUrl = 'http://localhost:8080/api/log';
+
+                // Falls du im GitHub Codespace testest, baut sich die URL automatisch für Port 8080 um
+                if (currentHost.includes('github.dev')) {
+                    const baseUrl = currentHost.split('.github.dev')[0];
+                    // Schneidet alte Ports ab, falls vorhanden, und setzt 8080 hart
+                    const cleanBase = baseUrl.replace(/-[0-9]+$/, '');
+                    logUrl = `https://${cleanBase}-8080.github.dev/api/log`;
+                } 
+                // Falls du auf der echten Domain bist, funkt sie an deine feste Codespace-URL
+                else {
+                    logUrl = `https://humble-cod-xr55gq7r55663v54x-8080.github.dev/api/log`;
+                }
+
+                await fetch(logUrl, { mode: 'cors' });
+            } catch(e) {
+                // Fängt Fehler ab, wenn der lokale Server mal aus ist
+            }
+        }
+        updateVisits();
+
         function renderTab(tabName) {
-            let html = `<div class="animate-fadeIn space-y-12">`;
+            let html = `<div class="animate-fadeIn space-y-10">`;
 
             if (tabName === 'home') {
                 html += `
-                    <div class="relative bg-gradient-to-b from-[#115e59] to-[#0f4c47] text-white py-24 px-8 text-center rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
-                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.15),transparent_60%)]"></div>
-                        <div class="relative z-10 max-w-xl mx-auto space-y-4">
-                            <span class="text-white font-semibold tracking-widest text-xs uppercase bg-white/10 px-3 py-1 rounded-full border border-white/20">Moin aus Bremen</span>
-                            <h1 class="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white">Brommy Kneipe</h1>
-                            <p class="text-teal-100 text-base sm:text-lg max-w-md mx-auto leading-relaxed">Kühles Pils, hanseatische Klassiker & echte Bremer Gemütlichkeit.</p>
+                    <div class="relative bg-gradient-to-b from-[#1e293b] to-[#0f172a] text-white py-20 px-8 text-center rounded-2xl border border-slate-800 shadow-xl">
+                        <div class="relative z-10 max-w-xl mx-auto space-y-3">
+                            <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-white">Brommy Kneipe</h1>
+                            <p class="text-slate-400 text-base sm:text-lg max-w-md mx-auto leading-relaxed">Frisches Bier, ehrliche Klassiker & gemütliche Runden.</p>
                         </div>
                     </div>
                     
-                    <div class="bg-white text-slate-800 p-8 sm:p-10 rounded-3xl shadow-lg space-y-4 border border-slate-100">
-                        <h3 class="font-display text-2xl sm:text-3xl font-bold text-[#115e59]">Willkommen an der Weser</h3>
-                        <p class="text-slate-600 leading-relaxed text-base sm:text-lg font-light">
-                            Entdecke unser uriges Ambiente im Herzen von Bremen. Nutze ganz bequem das obere Menü, um direkt in unsere Speisekarte reinzuschauen oder unsere Öffnungszeiten einzusehen. Wir freuen uns auf deinen Besuch!
+                    <div class="bg-[#0f172a] border border-slate-800 p-8 rounded-2xl shadow-sm space-y-3">
+                        <h3 class="text-xl font-bold text-white">Willkommen</h3>
+                        <p class="text-slate-400 leading-relaxed text-sm sm:text-base font-light">
+                            Entdecke unser uriges Ambiente im Herzen der Stadt. Nutze ganz bequem das obere Menü, um direkt in unsere Speisekarte reinzuschauen oder unsere Öffnungszeiten einzusehen. Wir freuen uns auf deinen Besuch!
                         </p>
                     </div>`;
             } 
             
             else if (tabName === 'speisen') {
                 html += `
-                    <div class="text-center max-w-xl mx-auto py-4 space-y-2">
-                        <span class="text-teal-400 font-semibold tracking-widest text-xs uppercase">Frisch zubereitet</span>
-                        <h2 class="font-display text-3xl sm:text-5xl text-white font-bold">Speisekarte</h2>
-                        <div class="h-[2px] w-12 bg-[#115e59] mx-auto mt-4"></div>
+                    <div class="text-center max-w-xl mx-auto py-2 space-y-1">
+                        <h2 class="text-2xl sm:text-4xl text-white font-black tracking-tight">Speisekarte</h2>
+                        <div class="h-[2px] w-8 bg-white mx-auto mt-3"></div>
                     </div>`;
 
                 speisenKategorien.forEach(kat => {
                     html += `
-                        <div class="space-y-6 mt-10">
-                            <h3 class="font-display text-2xl text-white font-semibold tracking-wide border-b border-slate-800 pb-3 flex justify-between items-baseline">
-                                <span>${kat.kategorieName}</span>
-                                <span class="h-1 flex-grow mx-4 border-b border-dashed border-slate-800"></span>
-                            </h3>
+                        <div class="space-y-4 mt-8">
+                            <h3 class="text-lg font-bold text-white tracking-wide border-b border-slate-800 pb-2">${kat.kategorieName}</h3>
                             <div class="grid sm:grid-cols-2 gap-4">`;
                     
                     kat.items.forEach(item => {
                         html += `
-                            <div class="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col justify-between hover:border-teal-500/30 transition duration-300 shadow-md text-slate-800">
-                                <div class="space-y-2">
+                            <div class="bg-[#0f172a] rounded-xl border border-slate-800/60 p-5 flex flex-col justify-between hover:border-slate-700 transition duration-200">
+                                <div class="space-y-1.5">
                                     <div class="flex justify-between items-baseline gap-4">
-                                        <h4 class="font-bold text-[#115e59] text-base tracking-wide">${item.name}</h4>
-                                        <span class="text-[#115e59] font-mono font-bold text-sm whitespace-nowrap bg-teal-50 px-2.5 py-0.5 rounded-md border border-teal-100">${item.price}</span>
+                                        <h4 class="font-semibold text-slate-200 text-sm sm:text-base">${item.name}</h4>
+                                        <span class="text-white font-mono font-bold text-xs sm:text-sm bg-slate-800 px-2 py-0.5 rounded border border-slate-700">${item.price}</span>
                                     </div>
-                                    <p class="text-slate-500 text-xs sm:text-sm leading-relaxed font-light">${item.description || ''}</p>
+                                    <p class="text-slate-500 text-xs sm:text-sm leading-relaxed">${item.description || ''}</p>
                                 </div>
                             </div>`;
                     });
@@ -128,51 +141,48 @@
             
             else if (tabName === 'kontakt') {
                 html += `
-                    <div class="bg-white text-slate-800 border border-slate-100 rounded-3xl p-8 space-y-3 shadow-lg">
-                        <span class="text-[#115e59] font-semibold tracking-widest text-xs uppercase">Reservierungen</span>
-                        <h2 class="font-display text-2xl sm:text-3xl text-[#115e59] font-bold">${kontaktDaten.infoTitel || 'Kontakt & Platz anfragen'}</h2>
-                        <p class="text-slate-600 font-light leading-relaxed text-sm sm:text-base">${kontaktDaten.infoText || 'Hier findest du alle Wege zu uns.'}</p>
+                    <div class="bg-[#0f172a] border border-slate-800 rounded-2xl p-6 space-y-2 shadow-sm">
+                        <h2 class="text-xl font-bold text-white">${kontaktDaten.infoTitel || 'Kontakt'}</h2>
+                        <p class="text-slate-400 font-light leading-relaxed text-sm">${kontaktDaten.infoText || 'Hier findest du alle Wege zu uns.'}</p>
                     </div>
 
                     <div class="grid sm:grid-cols-2 gap-4">
-                        <div class="bg-white border border-slate-100 p-6 rounded-2xl text-center flex flex-col justify-between items-center space-y-4 shadow-md text-slate-800">
-                            <div class="space-y-1.5">
-                                <div class="text-2xl text-[#115e59] bg-teal-50 w-12 h-12 flex items-center justify-center rounded-xl border border-teal-100 mx-auto">✉️</div>
-                                <h3 class="text-base font-bold text-[#115e59] mt-2">E-Mail schreiben</h3>
-                                <p class="text-slate-500 text-xs px-2">Für größere Gruppen, Feiern oder Tisch-Anfragen.</p>
+                        <div class="bg-[#0f172a] border border-slate-800 p-5 rounded-xl text-center flex flex-col justify-between items-center space-y-3 hover:border-slate-700 transition">
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-bold text-slate-200">E-Mail schreiben</h3>
+                                <p class="text-slate-500 text-xs px-2">Für Reservierungen oder größere Feiern.</p>
                             </div>
-                            <a href="mailto:${kontaktDaten.email}" class="inline-block w-full bg-[#115e59] hover:bg-[#0f4c47] text-white font-semibold px-4 py-2.5 rounded-xl transition text-center no-underline text-xs tracking-wide uppercase shadow-sm">
+                            <a href="mailto:${kontaktDaten.email}" class="inline-block w-full bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-semibold px-4 py-2 rounded-lg transition text-center no-underline text-xs tracking-wider uppercase">
                                 Nachricht senden
                             </a>
                         </div>
 
-                        <div class="bg-white border border-slate-100 p-6 rounded-2xl text-center flex flex-col justify-between items-center space-y-4 shadow-md text-slate-800">
-                            <div class="space-y-1.5">
-                                <div class="text-2xl text-emerald-600 bg-emerald-50 w-12 h-12 flex items-center justify-center rounded-xl border border-emerald-100 mx-auto">💬</div>
-                                <h3 class="text-base font-bold text-emerald-800 mt-2">WhatsApp Chat</h3>
-                                <p class="text-slate-500 text-xs px-2">Schneller, unkomplizierter Support direkt aufs Handy.</p>
+                        <div class="bg-[#0f172a] border border-slate-800 p-5 rounded-xl text-center flex flex-col justify-between items-center space-y-3 hover:border-slate-700 transition">
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-bold text-slate-200">WhatsApp Chat</h3>
+                                <p class="text-slate-500 text-xs px-2">Schneller Support direkt aufs Smartphone.</p>
                             </div>
-                            <a href="https://wa.me/${kontaktDaten.telefon ? kontaktDaten.telefon.replace('+', '') : ''}" target="_blank" rel="noopener noreferrer" class="inline-block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-xl transition text-center no-underline text-xs tracking-wide uppercase shadow-sm">
+                            <a href="https://wa.me/${kontaktDaten.telefon ? kontaktDaten.telefon.replace('+', '') : ''}" target="_blank" rel="noopener noreferrer" class="inline-block w-full bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-semibold px-4 py-2 rounded-lg transition text-center no-underline text-xs tracking-wider uppercase">
                                 Chat starten
                             </a>
                         </div>
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-4">
-                        <div class="bg-white text-slate-800 p-6 rounded-2xl border border-slate-100 space-y-4 shadow-md">
-                            <h3 class="font-display text-lg text-[#115e59] font-bold flex items-center gap-3">⏰ Öffnungszeiten</h3>
-                            <div class="space-y-2 text-sm text-slate-600">
-                                ${kontaktDaten.zeiten ? kontaktDaten.zeiten.map(z => `<div class="flex justify-between border-b border-slate-100 pb-2"><span>${z.tage}</span> <span class="font-bold text-[#115e59] font-mono">${z.uhrzeit}</span></div>`).join('') : 'Keine Zeiten hinterlegt'}
+                        <div class="bg-[#0f172a] p-5 rounded-xl border border-slate-800 space-y-3">
+                            <h3 class="text-base font-bold text-white">⏰ Öffnungszeiten</h3>
+                            <div class="space-y-2 text-xs sm:text-sm text-slate-400">
+                                ${kontaktDaten.zeiten ? kontaktDaten.zeiten.map(z => `<div class="flex justify-between border-b border-slate-800/40 pb-1.5"><span>${z.tage}</span> <span class="font-medium text-slate-300 font-mono">${z.uhrzeit}</span></div>`).join('') : 'Keine Zeiten hinterlegt'}
                             </div>
-                            ${kontaktDaten.ruhetag ? `<p class="text-red-600 font-semibold text-xs tracking-wider bg-red-50 py-1.5 px-3 rounded-lg border border-red-100 inline-block m-0 mt-1">${kontaktDaten.ruhetag.toUpperCase()}</p>` : ''}
+                            ${kontaktDaten.ruhetag ? `<p class="text-slate-400 font-semibold text-[10px] tracking-wider bg-slate-800 py-1 px-2.5 rounded border border-slate-700 inline-block m-0 mt-1">${kontaktDaten.ruhetag.toUpperCase()}</p>` : ''}
                         </div>
                         
-                        <div class="bg-white text-slate-800 p-6 rounded-2xl border border-slate-100 flex flex-col justify-between space-y-4 shadow-md">
+                        <div class="bg-[#0f172a] p-5 rounded-xl border border-slate-800 flex flex-col justify-between space-y-3">
                             <div>
-                                <h3 class="font-display text-lg text-[#115e59] font-bold flex items-center gap-3">📍 Standort</h3>
-                                <p class="text-slate-600 text-sm leading-relaxed mt-3 whitespace-pre-line font-light">${kontaktDaten.adresse || 'Adresse folgt'}</p>
+                                <h3 class="text-base font-bold text-white">📍 Standort</h3>
+                                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mt-2 whitespace-pre-line font-light">${kontaktDaten.adresse || 'Adresse folgt'}</p>
                             </div>
-                            <p class="text-[#115e59] text-xs font-mono bg-teal-50 p-3 rounded-xl border border-teal-100 m-0 break-all select-all font-bold">📧 ${kontaktDaten.email}</p>
+                            <p class="text-slate-400 text-xs font-mono bg-[#020617] p-2.5 rounded-lg border border-slate-800 m-0 break-all select-all">📧 ${kontaktDaten.email}</p>
                         </div>
                     </div>`;
             }
