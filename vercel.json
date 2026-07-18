@@ -1,1 +1,25 @@
-{"version": 2, "cleanUrls": true}
+{
+  "builds": [
+    {
+      "src": "api/bewertung.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "components/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/bewertung",
+      "dest": "api/bewertung.py"
+    },
+    {
+      "handle": "filesystem"
+    }
+  ]
+}
