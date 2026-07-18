@@ -10,5 +10,11 @@ export const bewertungenListe = [
         sterne: 9,
         empfehlung: true,
         beschreibung: "Urige Atmosphäre, nette Bedienung. Perfekt für ein feierabendliches Bierchen."
+    },
+    {
+    name: "Anonym",
+    sterne: 10,
+    empfehlung: false,
+    beschreibung: "gute bedienung"
     }
 ];
