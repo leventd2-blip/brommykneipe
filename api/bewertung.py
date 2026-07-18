@@ -1,10 +1,22 @@
-from http.server import BaseHTTPRequestHandler
-import json
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
-class handler(BaseHTTPRequestHandler):
-    def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.end_headersNormally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
+app = FastAPI()
+
+# CORS aktivieren, damit Anfragen von überall durchgehen
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.post("/api/bewertung")
+async def receive_bewertung(request: Request):
+    neue_bewertung = await request.json()
+    
+    # Logged die Bewertung direkt in Echtzeit ins Vercel-Dashboard
+    print("NEUE BEWERTUNG ERHALTEN:", neue_bewertung)
+    
+    return {"status": "success"}

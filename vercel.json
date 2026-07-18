@@ -1,25 +1,8 @@
 {
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/bewertung.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "components/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/bewertung",
-      "dest": "api/bewertung.py"
-    },
-    {
-      "handle": "filesystem"
+      "source": "/api/(.*)",
+      "destination": "/api/bewertung.py"
     }
   ]
 }
