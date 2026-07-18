@@ -9,5 +9,5 @@ export const kontaktDaten = {
     ruhetag: "Kein Ruhetag",
     adresse: "Brommy Kneipe\nHemelinger Str. 7\n28205 Bremen\n(Peterswerder)",
     email: "info@brommykneipe.de", 
-    telefon: "+49 160 93153923"
+    telefon: "1234567890"
 };
