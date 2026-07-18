@@ -1,13 +1,13 @@
 export const kontaktDaten = {
-    infoTitel: "Platzhalter Info Titel",
-    infoText: "Platzhalter Info Text",
+    infoTitel: "Willkommen in der Brommy Kneipe",
+    infoText: "Urige Gemütlichkeit im Herzen von Bremen. Schau vorbei oder meld dich bei uns!",
     zeiten: [
-        { tage: "Platzhalter Tage 1", uhrzeit: "00:00 - 00:00 Uhr" },
-        { tage: "Platzhalter Tage 2", uhrzeit: "00:00 - 00:00 Uhr" },
-        { tage: "Platzhalter Tage 3", uhrzeit: "00:00 - 00:00 Uhr" }
+        { tage: "Montag - Donnerstag", uhrzeit: "17:00 - 00:00 Uhr" },
+        { tage: "Freitag - Samstag", uhrzeit: "17:00 - 02:00 Uhr" },
+        { tage: "Sonntag", uhrzeit: "15:00 - 22:00 Uhr" }
     ],
-    ruhetag: "Platzhalter Ruhetag",
-    adresse: "Brommy Kneipe\nHemelinger Str. 7, 28205 Bremen\nPeterswerder (Östliche Hauptstadt)git add . && git commit -m "fix: move images to public folder for vercel build" && git push origin main",
-    email: "platzhalter@email.de", 
-    telefon: "+491234567890"
+    ruhetag: "Kein Ruhetag",
+    adresse: "Brommy Kneipe\nHemelinger Str. 7\n28205 Bremen\n(Peterswerder)",
+    email: "info@brommykneipe.de", 
+    telefon: "+491234567890" // Hier deine echte Nummer ohne Leerzeichen eintragen
 };
