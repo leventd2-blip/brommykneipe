@@ -71,23 +71,9 @@
         const tabButtons = document.querySelectorAll('.tab-btn');
         const viewTarget = document.getElementById('view-target');
 
-        // Api-URL Erkennung
-        function getApiUrl(endpoint) {
-            const currentHost = window.location.hostname;
-            if (currentHost.includes('github.dev')) {
-                const baseUrl = currentHost.split('.github.dev')[0].replace(/-[0-9]+$/, '');
-                return `https://${baseUrl}-8080.github.dev${endpoint}`;
-            }
-            return `https://humble-cod-xr55gq7r55663v54x-8080.github.dev${endpoint}`;
-        }
-
-        async function updateVisits() {
-            try { await fetch(getApiUrl('/api/log'), { mode: 'cors' }); } catch(e) {}
-        }
-        updateVisits();
-
         window.submitBewertung = async function(event) {
             event.preventDefault();
+            
             const nameInput = document.getElementById('rev-name').value.trim();
             const SterneInput = parseInt(document.getElementById('rev-sterne').value);
             const empfehlungInput = document.getElementById('rev-empfehlung').checked;
@@ -101,18 +87,21 @@
             };
 
             try {
-                const response = await fetch(getApiUrl('/api/bewertung'), {
+                // Schickt die Daten direkt an die Vercel Serverless Function
+                const response = await fetch('/api/bewertung', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    mode: 'cors',
                     body: JSON.stringify(daten)
                 });
+                
                 if(response.ok) {
                     document.getElementById('bewertung-form').reset();
                     document.getElementById('danke-modal').classList.remove('hidden');
+                } else {
+                    alert("Fehler beim Senden. Bitte versuche es später noch einmal.");
                 }
             } catch (e) {
-                alert("Fehler beim Senden. Läuft der Python-Server im Terminal?");
+                alert("Netzwerkfehler. Bitte überprüfe deine Internetverbindung.");
             }
         };
 
@@ -215,7 +204,7 @@
                                                 <h4 class="font-bold text-white text-base">${b.name}</h4>
                                                 <p class="text-xs text-emerald-400 font-mono mt-0.5">${b.sterne}/10 Sterne</p>
                                             </div>
-                                            ${b.empfehlung ? `<span class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full font-bold">👍 Empfohlen</span>` : ''}
+                                            ${b.empfehlung === true || b.empfehlung === "Ja" ? `<span class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full font-bold">👍 Empfohlen</span>` : ''}
                                         </div>
                                         <p class="text-emerald-100/70 text-sm leading-relaxed font-light">${b.beschreibung}</p>
                                     </div>
@@ -259,27 +248,27 @@
                             <div class="bg-[#022c22] p-3 rounded-xl border border-[#064e3b] flex items-center justify-between"><span class="text-emerald-300 text-xs font-mono select-all break-all pr-2">📧 ${kontaktDaten.email}</span></div>
                         </div>
                     </div>`;
-            }
-
-            html += `</div>`;
-            viewTarget.innerHTML = html;
         }
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const targetTab = button.getAttribute('data-tab');
-                renderTab(targetTab);
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    if (btn.getAttribute('data-tab') === targetTab && btn.innerText !== 'BROMMY KNEIPE') {
-                        btn.className = 'tab-btn nav-active pb-1 text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase';
-                    } else if (btn.innerText !== 'BROMMY KNEIPE') {
-                        btn.className = 'tab-btn nav-inactive pb-1 text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase';
-                    }
-                });
+        html += `</div>`;
+        viewTarget.innerHTML = html;
+    }
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.getAttribute('data-tab');
+            renderTab(targetTab);
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.getAttribute('data-tab') === targetTab && btn.innerText !== 'BROMMY KNEIPE') {
+                    btn.className = 'tab-btn nav-active pb-1 text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase';
+                } else if (btn.innerText !== 'BROMMY KNEIPE') {
+                    btn.className = 'tab-btn nav-inactive pb-1 text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase';
+                }
             });
         });
+    });
 
-        renderTab('home');
-    </script>
+    renderTab('home');
+</script>
 </body>
 </html>
