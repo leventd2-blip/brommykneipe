@@ -7,7 +7,7 @@ export const kontaktDaten = {
         { tage: "Platzhalter Tage 3", uhrzeit: "00:00 - 00:00 Uhr" }
     ],
     ruhetag: "Platzhalter Ruhetag",
-    adresse: "Platzhalter Name\nPlatzhalter Straße\nPlatzhalter Ort",
+    adresse: "Brommy Kneipe\nHemelinger Str. 7, 28205 Bremen\nPeterswerder (Östliche Hauptstadt)git add . && git commit -m "fix: move images to public folder for vercel build" && git push origin main",
     email: "platzhalter@email.de", 
     telefon: "+491234567890"
 };
