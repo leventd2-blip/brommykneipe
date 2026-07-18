@@ -71,6 +71,9 @@
         const tabButtons = document.querySelectorAll('.tab-btn');
         const viewTarget = document.getElementById('view-target');
 
+        // Formspark Verbindung für das Kneipen-Feedback
+        const FORMSPARK_URL = "https://submit-form.com/f6mq0UCAk";
+
         window.submitBewertung = async function(event) {
             event.preventDefault();
             
@@ -82,15 +85,18 @@
             const daten = {
                 name: nameInput || "Anonym",
                 sterne: SterneInput,
-                empfehlung: empfehlungInput,
+                empfehlung: empfehlungInput ? "Ja" : "Nein",
                 beschreibung: beschreibungInput
             };
 
             try {
-                // Schickt die Daten direkt an die Vercel Serverless Function
-                const response = await fetch('/api/bewertung', {
+                // Schickt die Daten direkt an dein Formspark-Dashboard
+                const response = await fetch(FORMSPARK_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
                     body: JSON.stringify(daten)
                 });
                 
