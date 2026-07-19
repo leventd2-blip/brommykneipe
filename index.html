@@ -25,15 +25,15 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex items-center justify-between h-20 gap-4">
                 <div class="flex-shrink-0">
-                    <button data-tab="home" class="tab-btn text-lg sm:text-2xl font-black text-white tracking-wider cursor-pointer bg-transparent border-0 flex items-center gap-2 hover:text-emerald-400 transition whitespace-nowrap">
+                    <button data-route="/" class="nav-link text-lg sm:text-2xl font-black text-white tracking-wider cursor-pointer bg-transparent border-0 flex items-center gap-2 hover:text-emerald-400 transition whitespace-nowrap">
                         BROMMY <span class="text-emerald-400">KNEIPE</span>
                     </button>
                 </div>
                 <div class="flex space-x-2 sm:space-x-8 overflow-x-auto no-scrollbar py-1">
-                    <button data-tab="home" class="tab-btn nav-active pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Home</button>
-                    <button data-tab="speisen" class="tab-btn nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Speisen</button>
-                    <button data-tab="bewertung" class="tab-btn nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Feedback</button>
-                    <button data-tab="kontakt" class="tab-btn nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Kontakt</button>
+                    <button data-route="/" class="nav-link nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Home</button>
+                    <button data-route="/speisen" class="nav-link nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Speisen</button>
+                    <button data-route="/feedback" class="nav-link nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Feedback</button>
+                    <button data-route="/kontakt" class="nav-link nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Kontakt</button>
                 </div>
             </div>
         </div>
@@ -58,29 +58,13 @@
         </div>
     </div>
 
-    <!-- Legal Modal (Impressum & Datenschutz) -->
-    <div id="legal-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-[#064e3b] border-2 border-emerald-500 rounded-3xl p-6 sm:p-8 max-w-2xl w-full max-h-[80vh] flex flex-col space-y-4 animate-fadeIn shadow-2xl">
-            <h3 id="legal-title" class="text-xl sm:text-2xl font-black font-brush tracking-wide text-white uppercase">Rechtliches</h3>
-            
-            <!-- Scrollbarer Textbereich -->
-            <div id="legal-content" class="text-emerald-100/80 text-sm leading-relaxed overflow-y-auto pr-2 space-y-4 text-left font-light">
-                <!-- Text wird dynamisch per JS eingefügt -->
-            </div>
-            
-            <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl uppercase tracking-wider transition cursor-pointer border-0 text-sm mt-2 flex-shrink-0">
-                Schließen
-            </button>
-        </div>
-    </div>
-
     <!-- Footer -->
     <footer class="bg-[#022c22] text-[#0f766e] text-center py-8 text-xs border-t border-[#064e3b] mt-auto tracking-widest space-y-2">
         <p>© 2026 BROMMY KNEIPE. ALL RIGHTS RESERVED.</p>
         <div class="flex justify-center space-x-4 font-sans tracking-normal normal-case">
-            <button onclick="document.getElementById('legal-modal').classList.remove('hidden'); showLegal('impressum')" class="hover:text-emerald-400 transition cursor-pointer bg-transparent border-0 text-[#0f766e] text-xs">Impressum</button>
+            <button data-route="/impressum" class="nav-link hover:text-emerald-400 transition cursor-pointer bg-transparent border-0 text-[#0f766e] text-xs">Impressum</button>
             <span>|</span>
-            <button onclick="document.getElementById('legal-modal').classList.remove('hidden'); showLegal('datenschutz')" class="hover:text-emerald-400 transition cursor-pointer bg-transparent border-0 text-[#0f766e] text-xs">Datenschutz</button>
+            <button data-route="/datenschutz" class="nav-link hover:text-emerald-400 transition cursor-pointer bg-transparent border-0 text-[#0f766e] text-xs">Datenschutz</button>
         </div>
     </footer>
 
@@ -89,14 +73,11 @@
         import { kontaktDaten } from './components/kontakt.js';
         import { bewertungenListe } from './components/bewertungen.js';
 
-        const tabButtons = document.querySelectorAll('.tab-btn');
         const viewTarget = document.getElementById('view-target');
-
         const FORMSPARK_URL = "https://submit-form.com/f6mq0UCAk";
 
         window.submitBewertung = async function(event) {
             event.preventDefault();
-            
             const nameInput = document.getElementById('rev-name').value.trim();
             const SterneInput = parseInt(document.getElementById('rev-sterne').value);
             const empfehlungInput = document.getElementById('rev-empfehlung').checked;
@@ -112,71 +93,43 @@
             try {
                 const response = await fetch(FORMSPARK_URL, {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(daten)
                 });
-                
                 if(response.ok) {
                     document.getElementById('bewertung-form').reset();
                     document.getElementById('danke-modal').classList.remove('hidden');
                 } else {
-                    alert("Fehler beim Senden. Bitte versuche es später noch einmal.");
+                    alert("Fehler beim Senden.");
                 }
             } catch (e) {
-                alert("Netzwerkfehler. Bitte überprüfe deine Internetverbindung.");
+                alert("Netzwerkfehler.");
             }
         };
 
-        window.showLegal = function(type) {
-            const title = document.getElementById('legal-title');
-            const content = document.getElementById('legal-content');
-            
-            if (type === 'impressum') {
-                title.innerText = "Impressum";
-                content.innerHTML = `
-                    <p class="font-bold text-white">Angaben gemäß § 5 TMG:</p>
-                    <p>Die Brommy Kneipe UG (haftungsbeschränkt)<br>
-                    Hemelinger Str. 7<br>
-                    28205 Bremen</p>
-                    
-                    <p class="font-bold text-white mt-4">Kontakt:</p>
-                    <p>Telefon: [Hier Telefonnummer eintragen]<br>
-                    E-Mail: [Hier E-Mail-Adresse eintragen]</p>
-                    
-                    <p class="font-bold text-white mt-4">Vertreten durch die Geschäftsführerin:</p>
-                    <p>Nicole Klenke</p>
+        function navigateTo(path) {
+            window.history.pushState({}, "", path);
+            renderRoute(path);
+        }
 
-                    <p class="font-bold text-white mt-4">Registereintrag:</p>
-                    <p>Eintragung im Handelsregister.<br>
-                    Registergericht: Amtsgericht Bremen<br>
-                    Registernummer: HRB 34081 HB</p>
-                    
-                    <p class="font-bold text-white mt-4">EU-Streitschlichtung:</p>
-                    <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr" target="_blank" class="text-emerald-400 underline">https://ec.europa.eu/consumers/odr</a>.<br>Unsere E-Mail-Adresse finden Sie oben im Impressum.</p>
-                `;
-            } else if (type === 'datenschutz') {
-                title.innerText = "Datenschutzerklärung";
-                content.innerHTML = `
-                    <p class="font-bold text-white">1. Datenschutz auf einen Blick</p>
-                    <p>Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften (DSGVO) sowie dieser Datenschutzerklärung.</p>
-                    
-                    <p class="font-bold text-white mt-4">2. Datenerfassung auf unserer Website</p>
-                    <p><span class="font-bold text-emerald-300">Feedback-Formular:</span> Wenn Sie uns eine Bewertung über das Formular senden, werden die von Ihnen eingegebenen Daten (Name/Anonym, Sterne, Empfehlung, Text) an den Dienst Formspark (Dienstsitz in der EU) übertragen, um uns die Auswertung der Bewertungen zu ermöglichen. Die Übertragung erfolgt verschlüsselt.</p>
-                    <p><span class="font-bold text-emerald-300">WhatsApp & E-Mail:</span> Wenn Sie die Kontakt-Buttons nutzen, verarbeiten wir Ihre Daten (z.B. Telefonnummer oder E-Mail-Adresse) nur, um Ihre Anfrage (z.B. eine Reservierung) zu beantworten.</p>
-                    
-                    <p class="font-bold text-white mt-4">3. Ihre Rechte</p>
-                    <p>Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Wenden Sie sich hierzu einfach an die im Impressum angegebenen Kontaktdaten.</p>
-                `;
-            }
-        };
+        function updateNavHighlights(currentPath) {
+            document.querySelectorAll('.nav-link').forEach(btn => {
+                const route = btn.getAttribute('data-route');
+                if (btn.innerText === 'BROMMY KNEIPE') return;
+                
+                if (route === currentPath) {
+                    btn.className = 'nav-link nav-active pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase';
+                } else {
+                    btn.className = 'nav-link nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase';
+                }
+            });
+        }
 
-        function renderTab(tabName) {
+        function renderRoute(path) {
+            updateNavHighlights(path);
             let html = `<div class="animate-fadeIn space-y-8 sm:space-y-12">`;
 
-            if (tabName === 'home') {
+            if (path === '/' || path === '/index.html') {
                 html += `
                     <!-- Hero Section -->
                     <div class="relative bg-gradient-to-r from-[#064e3b] via-[#022c22] to-[#115e59] rounded-3xl border border-[#0f766e]/30 shadow-2xl overflow-hidden p-6 sm:p-16 text-left flex flex-col md:flex-row items-center gap-8 md:gap-12 min-h-[420px]">
@@ -188,8 +141,8 @@
                             <h1 class="text-3xl sm:text-6xl font-black text-white leading-tight uppercase font-brush tracking-wide">Echte Kneipe.<br><span class="text-emerald-400">Bremer Herz.</span></h1>
                             <p class="text-emerald-100/70 text-sm sm:text-lg leading-relaxed max-w-md font-light">Frisch gezapftes Bier, ehrliche Kneipen-Klassiker und die perfekte Atmosphäre für jeden Spieltag direkt in Bremen.</p>
                             <div class="flex flex-wrap gap-3 sm:gap-4 pt-2">
-                                <button onclick="document.querySelector('[data-tab=speisen]').click()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition duration-200 shadow-lg shadow-emerald-500/20 uppercase tracking-wider cursor-pointer border-0">Unsere Karte</button>
-                                <button onclick="document.querySelector('[data-tab=kontakt]').click()" class="bg-transparent hover:bg-emerald-900/40 text-white border border-emerald-600 font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition uppercase tracking-wider cursor-pointer">Hier finden</button>
+                                <button onclick="window.router.navigate('/speisen')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition duration-200 shadow-lg shadow-emerald-500/20 uppercase tracking-wider cursor-pointer border-0">Unsere Karte</button>
+                                <button onclick="window.router.navigate('/kontakt')" class="bg-transparent hover:bg-emerald-900/40 text-white border border-emerald-600 font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition uppercase tracking-wider cursor-pointer">Hier finden</button>
                             </div>
                         </div>
                         <div class="flex-1 w-full md:w-1/2 h-[240px] sm:h-[320px] rounded-2xl overflow-hidden border-4 border-[#064e3b] shadow-2xl bg-[#042f2e] flex items-center justify-center relative group">
@@ -209,7 +162,7 @@
                     </div>`;
             } 
             
-            else if (tabName === 'speisen') {
+            else if (path === '/speisen') {
                 html += `
                     <div class="text-center max-w-xl mx-auto py-2 sm:py-4 space-y-2">
                         <span class="text-xs font-bold text-emerald-400 tracking-widest uppercase">Für den großen & kleinen Hunger</span>
@@ -234,10 +187,9 @@
                 });
             }
 
-            else if (tabName === 'bewertung') {
+            else if (path === '/feedback') {
                 html += `
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-start">
-                        <!-- Formular Spalte -->
                         <div class="md:col-span-1 bg-[#064e3b]/60 border border-[#0f766e]/30 rounded-3xl p-5 sm:p-6 space-y-4 md:sticky md:top-24">
                             <h3 class="text-xl font-black font-brush tracking-wide text-white uppercase">Deine Meinung</h3>
                             <form id="bewertung-form" onsubmit="submitBewertung(event)" class="space-y-4">
@@ -262,8 +214,6 @@
                                 <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl uppercase tracking-wider transition cursor-pointer border-0 text-sm">Abschicken</button>
                             </form>
                         </div>
-
-                        <!-- Bewertungen Spalte -->
                         <div class="md:col-span-2 space-y-4 sm:space-y-6">
                             <h3 class="text-xl sm:text-2xl font-black font-brush tracking-wide text-white uppercase">Gästebuch</h3>
                             <div class="space-y-4">
@@ -281,11 +231,10 @@
                                 `).join('')}
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
 
-            else if (tabName === 'kontakt') {
+            else if (path === '/kontakt') {
                 html += `
                     <div class="bg-[#064e3b]/40 border border-[#0f766e]/20 rounded-3xl p-6 sm:p-8 space-y-3 shadow-sm text-center md:text-left">
                         <span class="text-xs font-bold text-emerald-400 tracking-widest uppercase">Immer für dich da</span>
@@ -318,27 +267,76 @@
                             <div class="bg-[#022c22] p-3 rounded-xl border border-[#064e3b] flex items-center justify-between overflow-hidden"><span class="text-emerald-300 text-[11px] sm:text-xs font-mono select-all break-all pr-2 truncate">📧 ${kontaktDaten.email}</span></div>
                         </div>
                     </div>`;
+            }
+
+            else if (path === '/impressum') {
+                html += `
+                    <div class="bg-[#064e3b]/40 border border-[#0f766e]/30 rounded-3xl p-6 sm:p-8 max-w-2xl mx-auto space-y-6 text-left">
+                        <h2 class="text-2xl sm:text-3xl font-black font-brush text-white uppercase tracking-wide">Impressum</h2>
+                        <div class="text-emerald-100/80 text-sm leading-relaxed space-y-4 font-light">
+                            <p class="font-bold text-white text-base">Angaben gemäß § 5 TMG:</p>
+                            <p>Die Brommy Kneipe UG (haftungsbeschränkt)<br>Hemelinger Str. 7<br>28205 Bremen</p>
+                            
+                            <p class="font-bold text-white text-base mt-4">Kontakt:</p>
+                            <p>Telefon: [Hier Telefonnummer eintragen]<br>E-Mail: [Hier E-Mail-Adresse eintragen]</p>
+                            
+                            <p class="font-bold text-white text-base mt-4">Vertreten durch die Geschäftsführerin:</p>
+                            <p>Nicole Klenke</p>
+
+                            <p class="font-bold text-white text-base mt-4">Registereintrag:</p>
+                            <p>Eintragung im Handelsregister.<br>Registergericht: Amtsgericht Bremen<br>Registernummer: HRB 34081 HB</p>
+                            
+                            <p class="font-bold text-white text-base mt-4">EU-Streitschlichtung:</p>
+                            <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr" target="_blank" class="text-emerald-400 underline">https://ec.europa.eu/consumers/odr</a>.</p>
+                        </div>
+                        <button onclick="window.router.navigate('/')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-6 rounded-xl uppercase tracking-wider transition text-xs border-0 cursor-pointer">Zurück zur Startseite</button>
+                    </div>`;
+            }
+
+            else if (path === '/datenschutz') {
+                html += `
+                    <div class="bg-[#064e3b]/40 border border-[#0f766e]/30 rounded-3xl p-6 sm:p-8 max-w-2xl mx-auto space-y-6 text-left">
+                        <h2 class="text-2xl sm:text-3xl font-black font-brush text-white uppercase tracking-wide">Datenschutzerklärung</h2>
+                        <div class="text-emerald-100/80 text-sm leading-relaxed space-y-4 font-light">
+                            <p class="font-bold text-white text-base">1. Datenschutz auf einen Blick</p>
+                            <p>Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften (DSGVO).</p>
+                            
+                            <p class="font-bold text-white text-base mt-4">2. Datenerfassung auf unserer Website</p>
+                            <p><span class="font-bold text-emerald-300">Feedback-Formular:</span> Daten werden an den Dienst Formspark (Dienstsitz in der EU) übertragen, um uns die Auswertung der Bewertungen zu ermöglichen.</p>
+                            <p><span class="font-bold text-emerald-300">WhatsApp & E-Mail:</span> Wir verarbeiten Ihre Daten nur, um Ihre Anfrage zu beantworten.</p>
+                            
+                            <p class="font-bold text-white text-base mt-4">3. Ihre Rechte</p>
+                            <p>Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten sowie deren Löschung zu verlangen.</p>
+                        </div>
+                        <button onclick="window.router.navigate('/')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-6 rounded-xl uppercase tracking-wider transition text-xs border-0 cursor-pointer">Zurück zur Startseite</button>
+                    </div>`;
+            }
+
+            html += `</div>`;
+            viewTarget.innerHTML = html;
         }
 
-        html += `</div>`;
-        viewTarget.innerHTML = html;
-    }
+        // Globaler Router für Klicks aus dem HTML heraus
+        window.router = {
+            navigate: navigateTo
+        };
 
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetTab = button.getAttribute('data-tab');
-            renderTab(targetTab);
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                if (btn.getAttribute('data-tab') === targetTab && btn.innerText !== 'BROMMY KNEIPE') {
-                    btn.className = 'tab-btn nav-active pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase';
-                } else if (btn.innerText !== 'BROMMY KNEIPE') {
-                    btn.className = 'tab-btn nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase';
-                }
-            });
+        // Klick-Events für alle Navigations-Links abfangen
+        document.addEventListener('click', e => {
+            const link = e.target.closest('[data-route]');
+            if (link) {
+                e.preventDefault();
+                navigateTo(link.getAttribute('data-route'));
+            }
         });
-    });
 
-    renderTab('home');
-</script>
+        // Event für Browser-Zurück / Vorwärts-Buttons
+        window.addEventListener('popstate', () => {
+            renderRoute(window.location.pathname);
+        });
+
+        // Initiales Laden basierend auf der aktuellen URL
+        renderRoute(window.location.pathname);
+    </script>
 </body>
 </html>
