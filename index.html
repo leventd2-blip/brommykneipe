@@ -129,7 +129,27 @@
             updateNavHighlights(path);
             let html = `<div class="animate-fadeIn space-y-8 sm:space-y-12">`;
 
-            if (path === '/' || path === '/index.html') {
+            // Gültige Pfade abgleichen
+            const validPaths = ['/', '/index.html', '/speisen', '/feedback', '/kontakt', '/impressum', '/datenschutz'];
+            
+            if (!validPaths.includes(path)) {
+                // Das hier wird angezeigt, wenn die URL falsch eingegeben wurde
+                html += `
+                    <div class="bg-[#064e3b]/40 border border-[#0f766e]/30 rounded-3xl p-8 sm:p-16 max-w-xl mx-auto space-y-6 text-center shadow-2xl">
+                        <div class="text-6xl sm:text-7xl">🍺❌</div>
+                        <h2 class="text-2xl sm:text-4xl font-black font-brush text-white uppercase tracking-wide">Seite nicht gefunden!</h2>
+                        <p class="text-emerald-100/70 text-sm sm:text-base leading-relaxed font-light">
+                            Da hast du dich wohl im Menü geirrt oder dein Bier war eins zu viel. Diese Seite existiert bei uns leider nicht.
+                        </p>
+                        <div class="pt-2">
+                            <button onclick="window.router.navigate('/')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-xl uppercase tracking-wider transition text-xs border-0 cursor-pointer shadow-lg shadow-emerald-500/20">
+                                Zurück zur Theke (Startseite)
+                            </button>
+                        </div>
+                    </div>`;
+            } 
+            
+            else if (path === '/' || path === '/index.html') {
                 html += `
                     <!-- Hero Section -->
                     <div class="relative bg-gradient-to-r from-[#064e3b] via-[#022c22] to-[#115e59] rounded-3xl border border-[#0f766e]/30 shadow-2xl overflow-hidden p-6 sm:p-16 text-left flex flex-col md:flex-row items-center gap-8 md:gap-12 min-h-[420px]">
