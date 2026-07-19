@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brommy Kneipe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@300..800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-brush { font-family: 'Permanent Marker', sans-serif; }
+        .nav-active { color: #10b981 !important; border-bottom: 2px solid #10b981; }
+        .nav-inactive { color: #ffffff; opacity: 0.8; }
+        .nav-inactive:hover { opacity: 1; color: #10b981; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-[#022c22] text-slate-100 min-h-screen flex flex-col antialiased">
+
+    <!-- Premium Navigation -->
+    <nav class="bg-[#064e3b]/95 backdrop-blur border-b border-[#0f766e]/30 sticky top-0 z-50 shadow-xl">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between h-20 gap-4">
+                <div class="flex-shrink-0">
+                    <button data-tab="home" class="tab-btn text-lg sm:text-2xl font-black text-white tracking-wider cursor-pointer bg-transparent border-0 flex items-center gap-2 hover:text-emerald-400 transition whitespace-nowrap">
+                        BROMMY <span class="text-emerald-400">KNEIPE</span>
+                    </button>
+                </div>
+                <div class="flex space-x-2 sm:space-x-8 overflow-x-auto no-scrollbar py-1">
+                    <button data-tab="home" class="tab-btn nav-active pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Home</button>
+                    <button data-tab="speisen" class="tab-btn nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Speisen</button>
+                    <button data-tab="bewertung" class="tab-btn nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Feedback</button>
+                    <button data-tab="kontakt" class="tab-btn nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase whitespace-nowrap">Kontakt</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Dynamic Wrapper -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8" id="view-target">
+        <!-- Injected via JS -->
+    </main>
+
+    <!-- Success Modal (Danke-Menü) -->
+    <div id="danke-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#064e3b] border-2 border-emerald-500 rounded-3xl p-6 sm:p-8 max-w-md w-full text-center space-y-6 animate-fadeIn shadow-2xl">
+            <div class="text-4xl sm:text-5xl">💚 ⚽</div>
+            <h3 class="text-xl sm:text-2xl font-black font-brush tracking-wide text-white uppercase">Vielen Dank!</h3>
+            <p class="text-emerald-100/80 text-xs sm:text-sm leading-relaxed">
+                Ihre Bewertung wurde erfolgreich eingereicht und wird bald von unserem Moderationsteam geprüft und freigegeben.
+            </p>
+            <button onclick="document.getElementById('danke-modal').classList.add('hidden')" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl uppercase tracking-wider transition cursor-pointer border-0 text-sm">
+                Schließen
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#022c22] text-[#0f766e] text-center py-6 sm:py-8 text-[10px] sm:text-xs border-t border-[#064e3b] mt-auto tracking-widest">
+        <p>© 2026 BROMMY KNEIPE. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script type="module">
+        import { speisenKategorien } from './components/speisen.js';
+        import { kontaktDaten } from './components/kontakt.js';
+        import { bewertungenListe } from './components/bewertungen.js';
+
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const viewTarget = document.getElementById('view-target');
+
+        const FORMSPARK_URL = "https://submit-form.com/f6mq0UCAk";
+
+        window.submitBewertung = async function(event) {
+            event.preventDefault();
+            
+            const nameInput = document.getElementById('rev-name').value.trim();
+            const SterneInput = parseInt(document.getElementById('rev-sterne').value);
+            const empfehlungInput = document.getElementById('rev-empfehlung').checked;
+            const beschreibungInput = document.getElementById('rev-beschreibung').value.trim();
+
+            const daten = {
+                name: nameInput || "Anonym",
+                sterne: SterneInput,
+                empfehlung: empfehlungInput ? "Ja" : "Nein",
+                beschreibung: beschreibungInput
+            };
+
+            try {
+                const response = await fetch(FORMSPARK_URL, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(daten)
+                });
+                
+                if(response.ok) {
+                    document.getElementById('bewertung-form').reset();
+                    document.getElementById('danke-modal').classList.remove('hidden');
+                } else {
+                    alert("Fehler beim Senden. Bitte versuche es später noch einmal.");
+                }
+            } catch (e) {
+                alert("Netzwerkfehler. Bitte überprüfen sie ihre Internet Verbindung und versuchen es später erneut.");
+            }
+        };
+
+        function renderTab(tabName) {
+            let html = `<div class="animate-fadeIn space-y-8 sm:space-y-12">`;
+
+            if (tabName === 'home') {
+                html += `
+                    <!-- Hero Section -->
+                    <div class="relative bg-gradient-to-r from-[#064e3b] via-[#022c22] to-[#115e59] rounded-3xl border border-[#0f766e]/30 shadow-2xl overflow-hidden p-6 sm:p-16 text-left flex flex-col md:flex-row items-center gap-8 md:gap-12 min-h-[420px]">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-400/10 via-transparent to-transparent opacity-70 pointer-events-none"></div>
+                        <div class="relative z-10 max-w-xl space-y-4 sm:space-y-6 flex-1 w-full">
+                            <div>
+                                <span class="text-emerald-400 uppercase tracking-widest font-bold text-[10px] sm:text-sm bg-emerald-400/10 border border-emerald-400/20 px-3 py-1 rounded-full">Lebenslang Grün-Weiß</span>
+                            </div>
+                            <h1 class="text-3xl sm:text-6xl font-black text-white leading-tight uppercase font-brush tracking-wide">Echte Kneipe.<br><span class="text-emerald-400">Bremer Herz.</span></h1>
+                            <p class="text-emerald-100/70 text-sm sm:text-lg leading-relaxed max-w-md font-light">Frisch gezapftes Bier, ehrliche Kneipen-Klassiker und die perfekte Atmosphäre für jeden Spieltag direkt in Bremen.</p>
+                            <div class="flex flex-wrap gap-3 sm:gap-4 pt-2">
+                                <button onclick="document.querySelector('[data-tab=speisen]').click()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition duration-200 shadow-lg shadow-emerald-500/20 uppercase tracking-wider cursor-pointer border-0">Unsere Karte</button>
+                                <button onclick="document.querySelector('[data-tab=kontakt]').click()" class="bg-transparent hover:bg-emerald-900/40 text-white border border-emerald-600 font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition uppercase tracking-wider cursor-pointer">Hier finden</button>
+                            </div>
+                        </div>
+                        <div class="flex-1 w-full md:w-1/2 h-[240px] sm:h-[320px] rounded-2xl overflow-hidden border-4 border-[#064e3b] shadow-2xl bg-[#042f2e] flex items-center justify-center relative group">
+                            <img src="/images/ambient.jpg" alt="Brommy Kneipe Bremen" class="w-full h-full object-cover object-center transform group-hover:scale-105 transition duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hidden absolute inset-0 flex-col items-center justify-center text-emerald-600/60 p-4 font-mono text-center text-xs tracking-widest bg-emerald-950/40">
+                                <span>📸 BILD HIER REINLEGEN</span>
+                                <span class="text-[10px] text-emerald-700 mt-2">Ordner: public/images/ambient.jpg</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Feature Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                        <div class="bg-[#064e3b]/40 border border-[#0f766e]/20 p-4 sm:p-5 rounded-2xl flex items-start gap-4 hover:border-emerald-600/40 transition"><div class="text-emerald-400 text-2xl mt-0.5">🍺</div><div><h4 class="text-white font-bold text-sm sm:text-base uppercase tracking-wide">Frisch Gezapft</h4><p class="text-emerald-200/50 text-xs mt-0.5 font-light">Kühles Blondes.</p></div></div>
+                        <div class="bg-[#064e3b]/40 border border-[#0f766e]/20 p-4 sm:p-5 rounded-2xl flex items-start gap-4 hover:border-emerald-600/40 transition"><div class="text-emerald-400 text-2xl mt-0.5">⚽</div><div><h4 class="text-white font-bold text-sm sm:text-base uppercase tracking-wide">Spieltag live</h4><p class="text-emerald-200/50 text-xs mt-0.5 font-light">Gemeinsam mitfiebern.</p></div></div>
+                        <div class="bg-[#064e3b]/40 border border-[#0f766e]/20 p-4 sm:p-5 rounded-2xl flex items-start gap-4 hover:border-emerald-600/40 transition"><div class="text-emerald-400 text-2xl mt-0.5">🌿</div><div><h4 class="text-white font-bold text-sm sm:text-base uppercase tracking-wide">Beste Küche</h4><p class="text-emerald-200/50 text-xs mt-0.5 font-light">Bremer Klassiker.</p></div></div>
+                        <div class="bg-[#064e3b]/40 border border-[#0f766e]/20 p-4 sm:p-5 rounded-2xl flex items-start gap-4 hover:border-emerald-600/40 transition"><div class="text-emerald-400 text-2xl mt-0.5">💚</div><div><h4 class="text-white font-bold text-sm sm:text-base uppercase tracking-wide">Bremer Herz</h4><p class="text-emerald-200/50 text-xs mt-0.5 font-light">Unter Freunden.</p></div></div>
+                    </div>`;
+            } 
+            
+            else if (tabName === 'speisen') {
+                html += `
+                    <div class="text-center max-w-xl mx-auto py-2 sm:py-4 space-y-2">
+                        <span class="text-xs font-bold text-emerald-400 tracking-widest uppercase">Für den großen & kleinen Hunger</span>
+                        <h2 class="text-3xl sm:text-5xl text-white font-black tracking-tight font-brush uppercase tracking-wide">Speisekarte</h2>
+                        <div class="h-[2px] w-12 bg-emerald-400 mx-auto mt-4"></div>
+                    </div>`;
+                speisenKategorien.forEach(kat => {
+                    html += `<div class="space-y-4 mt-8 sm:mt-12"><h3 class="text-lg sm:text-xl font-extrabold text-white tracking-wider border-b border-[#064e3b] pb-3 uppercase"><span class="text-emerald-400">//</span> ${kat.kategorieName}</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-stretch">`;
+                    kat.items.forEach(item => {
+                        html += `
+                            <div class="bg-[#064e3b]/40 rounded-2xl border border-[#0f766e]/20 p-5 sm:p-6 flex flex-col justify-between hover:border-emerald-400/40 hover:bg-[#064e3b]/60 transition duration-300 shadow-sm group min-h-[110px] h-full">
+                                <div class="space-y-2 flex-grow">
+                                    <div class="flex justify-between items-baseline gap-4">
+                                        <h4 class="font-bold text-white text-sm sm:text-lg group-hover:text-emerald-400 transition">${item.name}</h4>
+                                        <span class="text-emerald-400 font-mono font-black text-xs sm:text-base bg-emerald-400/10 px-2.5 py-1 rounded-xl border border-emerald-400/20 whitespace-nowrap">${item.price}</span>
+                                    </div>
+                                    <p class="text-emerald-100/60 text-xs sm:text-sm leading-relaxed font-light">${item.description || ''}</p>
+                                </div>
+                            </div>`;
+                    });
+                    html += `</div></div>`;
+                });
+            }
+
+            else if (tabName === 'bewertung') {
+                html += `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-start">
+                        <!-- Formular Spalte -->
+                        <div class="md:col-span-1 bg-[#064e3b]/60 border border-[#0f766e]/30 rounded-3xl p-5 sm:p-6 space-y-4 md:sticky md:top-24">
+                            <h3 class="text-xl font-black font-brush tracking-wide text-white uppercase">Deine Meinung</h3>
+                            <form id="bewertung-form" onsubmit="submitBewertung(event)" class="space-y-4">
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-emerald-400 font-bold mb-1">Name (Optional)</label>
+                                    <input type="text" id="rev-name" placeholder="Freilassen für Anonymität" class="w-full bg-[#022c22] border border-[#0f766e]/40 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-400">
+                                </div>
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-emerald-400 font-bold mb-1">Bewertung (0-10 Sterne)</label>
+                                    <select id="rev-sterne" class="w-full bg-[#022c22] border border-[#0f766e]/40 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-400">
+                                        ${[...Array(11).keys()].reverse().map(i => `<option value="${i}">${i} ${'★'.repeat(i ? 1 : 0)}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div class="flex items-start gap-3 py-2">
+                                    <input type="checkbox" id="rev-empfehlung" checked class="w-4 h-4 accent-emerald-500 rounded mt-0.5">
+                                    <label for="rev-empfehlung" class="text-xs sm:text-sm text-emerald-100/80 cursor-pointer select-none">Würdest du den Brommy weiterempfehlen? 💚</label>
+                                </div>
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-emerald-400 font-bold mb-1">Beschreibung</label>
+                                    <textarea id="rev-beschreibung" required rows="4" placeholder="Wie war dein Abend bei uns?" class="w-full bg-[#022c22] border border-[#0f766e]/40 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-400 resize-none"></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl uppercase tracking-wider transition cursor-pointer border-0 text-sm">Abschicken</button>
+                            </form>
+                        </div>
+
+                        <!-- Bewertungen Spalte -->
+                        <div class="md:col-span-2 space-y-4 sm:space-y-6">
+                            <h3 class="text-xl sm:text-2xl font-black font-brush tracking-wide text-white uppercase">Bewertungen</h3>
+                            <div class="space-y-4">
+                                ${bewertungenListe.map(b => `
+                                    <div class="bg-[#064e3b]/30 border border-[#0f766e]/20 rounded-2xl p-5 sm:p-6 space-y-3">
+                                        <div class="flex justify-between items-start gap-4">
+                                            <div>
+                                                <h4 class="font-bold text-white text-sm sm:text-base break-all">${b.name}</h4>
+                                                <p class="text-xs text-emerald-400 font-mono mt-0.5">${b.sterne}/10 Sterne</p>
+                                            </div>
+                                            ${b.empfehlung === true || b.empfehlung === "Ja" ? `<span class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] sm:text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full font-bold whitespace-nowrap">👍 Empfohlen</span>` : ''}
+                                        </div>
+                                        <p class="text-emerald-100/70 text-xs sm:text-sm leading-relaxed font-light break-words">${b.beschreibung}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            else if (tabName === 'kontakt') {
+                html += `
+                    <div class="bg-[#064e3b]/40 border border-[#0f766e]/20 rounded-3xl p-6 sm:p-8 space-y-3 shadow-sm text-center md:text-left">
+                        <span class="text-xs font-bold text-emerald-400 tracking-widest uppercase">Immer für dich da</span>
+                        <h2 class="text-xl sm:text-3xl font-black text-white font-brush tracking-wide">${kontaktDaten.infoTitel || 'Kontakt'}</h2>
+                        <p class="text-emerald-100/60 font-light leading-relaxed text-xs sm:text-base max-w-xl mx-auto md:mx-0">${kontaktDaten.infoText || 'Hier findest du alle Wege zu uns.'}</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 items-stretch">
+                        <div class="bg-[#064e3b]/40 border border-[#0f766e]/20 p-5 sm:p-6 rounded-2xl text-center flex flex-col justify-between items-center space-y-4 hover:border-emerald-500/30 transition h-full">
+                            <div class="space-y-1.5"><h3 class="text-sm sm:text-base font-bold text-white uppercase tracking-wide">E-Mail schreiben</h3><p class="text-emerald-200/50 text-xs px-2 sm:px-4">Für Reservierungen, Events oder Feedback.</p></div>
+                            <a href="mailto:${kontaktDaten.email}" class="inline-block w-full bg-[#042f2e] hover:bg-emerald-500 text-white font-bold px-4 py-3 rounded-xl transition text-center no-underline text-xs tracking-widest uppercase">Nachricht senden</a>
+                        </div>
+                        <div class="bg-[#064e3b]/40 border border-[#0f766e]/20 p-5 sm:p-6 rounded-2xl text-center flex flex-col justify-between items-center space-y-4 hover:border-emerald-500/30 transition h-full">
+                            <div class="space-y-1.5"><h3 class="text-sm sm:text-base font-bold text-white uppercase tracking-wide">WhatsApp Support</h3><p class="text-emerald-200/50 text-xs px-2 sm:px-4">Der schnellste Draht direkt an die Theke.</p></div>
+                            <a href="https://wa.me/${kontaktDaten.telefon ? kontaktDaten.telefon.replace('+', '') : ''}" target="_blank" rel="noopener noreferrer" class="inline-block w-full bg-[#042f2e] hover:bg-emerald-500 text-white font-bold px-4 py-3 rounded-xl transition text-center no-underline text-xs tracking-widest uppercase">Chat starten</a>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-stretch">
+                        <div class="bg-[#064e3b]/40 p-5 sm:p-8 rounded-2xl border border-[#0f766e]/20 space-y-4 h-full">
+                            <h3 class="text-base sm:text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2"><span class="text-emerald-400">⏰</span> Öffnungszeiten</h3>
+                            <div class="space-y-2.5 text-xs sm:text-sm text-emerald-200/60">
+                                ${kontaktDaten.zeiten ? kontaktDaten.zeiten.map(z => `<div class="flex justify-between border-b border-[#064e3b] pb-2"><span>${z.tage}</span> <span class="font-bold text-white font-mono">${z.uhrzeit}</span></div>`).join('') : 'Keine Zeiten hinterlegt'}
+                            </div>
+                            ${kontaktDaten.ruhetag ? `<p class="text-emerald-400 font-bold text-[10px] sm:text-[11px] tracking-widest bg-emerald-400/10 py-1.5 px-3 rounded-xl border border-emerald-400/20 inline-block m-0 mt-1 uppercase">${kontaktDaten.ruhetag}</p>` : ''}
+                        </div>
+                        <div class="bg-[#064e3b]/40 p-5 sm:p-8 rounded-2xl border border-[#0f766e]/20 flex flex-col justify-between space-y-4 h-full">
+                            <div>
+                                <h3 class="text-base sm:text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2"><span class="text-emerald-400">📍</span> Standort</h3>
+                                <p class="text-emerald-100/70 text-xs sm:text-sm leading-relaxed mt-3 whitespace-pre-line font-light">${kontaktDaten.adresse || 'Adresse folgt'}</p>
+                            </div>
+                            <div class="bg-[#022c22] p-3 rounded-xl border border-[#064e3b] flex items-center justify-between overflow-hidden"><span class="text-emerald-300 text-[11px] sm:text-xs font-mono select-all break-all pr-2 truncate">📧 ${kontaktDaten.email}</span></div>
+                        </div>
+                    </div>`;
+        }
+
+        html += `</div>`;
+        viewTarget.innerHTML = html;
+    }
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.getAttribute('data-tab');
+            renderTab(targetTab);
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.getAttribute('data-tab') === targetTab && btn.innerText !== 'BROMMY KNEIPE') {
+                    btn.className = 'tab-btn nav-active pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase';
+                } else if (btn.innerText !== 'BROMMY KNEIPE') {
+                    btn.className = 'tab-btn nav-inactive pb-1 text-xs sm:text-sm font-bold tracking-wide transition cursor-pointer bg-transparent border-0 uppercase';
+                }
+            });
+        });
+    });
+
+    renderTab('home');
+</script>
+</body>
+</html>
