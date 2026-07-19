@@ -44,7 +44,7 @@
         <!-- Injected via JS -->
     </main>
 
-    <!-- Success Modal (Danke-Menü) -->
+    <!-- Success Modal -->
     <div id="danke-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#064e3b] border-2 border-emerald-500 rounded-3xl p-6 sm:p-8 max-w-md w-full text-center space-y-6 animate-fadeIn shadow-2xl">
             <div class="text-4xl sm:text-5xl">💚 ⚽</div>
@@ -72,6 +72,7 @@
         import { speisenKategorien } from './components/speisen.js';
         import { kontaktDaten } from './components/kontakt.js';
         import { bewertungenListe } from './components/bewertungen.js';
+        import { brommyGeschichte } from './components/geschichte.js';
 
         const viewTarget = document.getElementById('view-target');
         const FORMSPARK_URL = "https://submit-form.com/f6mq0UCAk";
@@ -129,11 +130,9 @@
             updateNavHighlights(path);
             let html = `<div class="animate-fadeIn space-y-8 sm:space-y-12">`;
 
-            // Gültige Pfade abgleichen
             const validPaths = ['/', '/index.html', '/speisen', '/feedback', '/kontakt', '/impressum', '/datenschutz'];
             
             if (!validPaths.includes(path)) {
-                // Das hier wird angezeigt, wenn die URL falsch eingegeben wurde
                 html += `
                     <div class="bg-[#064e3b]/40 border border-[#0f766e]/30 rounded-3xl p-8 sm:p-16 max-w-xl mx-auto space-y-6 text-center shadow-2xl">
                         <div class="text-6xl sm:text-7xl">🍺❌</div>
@@ -173,6 +172,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- NEU: Geschichte des Brommy Section -->
+                    <div class="bg-[#064e3b]/20 border border-[#0f766e]/20 rounded-3xl p-6 sm:p-10 space-y-6 shadow-sm">
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold text-emerald-400 tracking-widest uppercase">${brommyGeschichte.untertitel}</span>
+                            <h2 class="text-2xl sm:text-4xl font-black text-white font-brush tracking-wide uppercase">${brommyGeschichte.titel}</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-emerald-100/80 text-xs sm:text-sm leading-relaxed font-light">
+                            ${brommyGeschichte.textBlöcke.map(block => `<p class="bg-[#022c22]/40 border border-[#0f766e]/10 p-5 rounded-2xl">${block}</p>`).join('')}
+                        </div>
+                    </div>
+
                     <!-- Feature Row -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                         <div class="bg-[#064e3b]/40 border border-[#0f766e]/20 p-4 sm:p-5 rounded-2xl flex items-start gap-4 hover:border-emerald-600/40 transition"><div class="text-emerald-400 text-2xl mt-0.5">🍺</div><div><h4 class="text-white font-bold text-sm sm:text-base uppercase tracking-wide">Frisch Gezapft</h4><p class="text-emerald-200/50 text-xs mt-0.5 font-light">Kühles Blondes.</p></div></div>
@@ -336,12 +347,8 @@
             viewTarget.innerHTML = html;
         }
 
-        // Globaler Router für Klicks aus dem HTML heraus
-        window.router = {
-            navigate: navigateTo
-        };
+        window.router = { navigate: navigateTo };
 
-        // Klick-Events für alle Navigations-Links abfangen
         document.addEventListener('click', e => {
             const link = e.target.closest('[data-route]');
             if (link) {
@@ -350,12 +357,10 @@
             }
         });
 
-        // Event für Browser-Zurück / Vorwärts-Buttons
         window.addEventListener('popstate', () => {
             renderRoute(window.location.pathname);
         });
 
-        // Initiales Laden basierend auf der aktuellen URL
         renderRoute(window.location.pathname);
     </script>
 </body>
